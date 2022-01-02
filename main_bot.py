@@ -1,6 +1,6 @@
 import logging
 from aiogram import Bot, Dispatcher, types, executor
-
+import pdb
 import asyncio
 
 
@@ -34,6 +34,7 @@ buttons = [
 @dp.message_handler(commands="start")
 async def cmd_start(message: types.Message):
     s = PriceUSDT(id=message.chat.id)
+
     for user in users_list:
         if user.id == message.chat.id:
             users_list.pop(users_list.index(user))
@@ -60,20 +61,20 @@ async def with_puree(message: types.Message):
 
     for user in users_list:
 
-        if user.id == message.chat.id:
-            user.set_coin(message.text)
-            if not user.status:
-                user.activate()
-                keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                butt = ["/stop", "/start"]
-                keyboard.add(*butt)
-                await message.reply(f"Start {user.coin}", reply_markup=keyboard)
+        if user.id != message.chat.id:
+            continue
+
+        user.set_coin(message.text)
+        if not user.status:
+            user.activate()
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            butt = ["/stop", "/start"]
+            keyboard.add(*butt)
+            await message.reply(f"Start {user.coin}", reply_markup=keyboard)
 
 
 async def send_messsage():
-    print(users_list)
     for user in users_list:
-        print(user.status)
         if user.status != []:
             new_message = user.get_message()
             await dp.bot.send_message(user.id, new_message)
