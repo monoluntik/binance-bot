@@ -64,7 +64,6 @@ async def with_puree(message: types.Message):
             return
 
         user.set_coin(message.text)
-
         if not user.status:
             user.activate()
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -75,10 +74,9 @@ async def with_puree(message: types.Message):
 
 async def send_messsage():
     for user in users_list:
-        if not user.status:
+        if user.status != []:
             new_message = user.get_message()
-            if new_message != "Измеменений нет!":
-                await dp.bot.send_message(user.id, new_message)
+            await dp.bot.send_message(user.id, new_message)
 
 
 def repeat(coro, loop):
