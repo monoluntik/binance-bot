@@ -35,6 +35,7 @@ buttons = [
 async def cmd_start(message: types.Message):
     s = PriceUSDT(id=message.chat.id)
 
+
     for user in users_list:
         if user.id == message.chat.id:
             users_list.pop(users_list.index(user))
