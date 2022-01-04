@@ -32,15 +32,17 @@ class PriceUSDT:
             python_obj = json.loads(json_obj)
             a = python_obj.get("price")
             k = float(a)
-            return round(k, 2)
+            return round(k, 2) if self.coin != "VET" else round(k, 5)
 
     def get_message(self):
         new_price = self.get_bnb_price()
         new_time = datetime.now()
-        price_change = round(abs(new_price-self.old_price), 2)
+        w = 2 if self.coin != "VET" else 5
+        price_change = abs(new_price-self.old_price)
+        a =  f'%0.{w}f' % price_change
         new_message = f"""{self.coin}\nOld price: {self.old_price}\n{self.old_time}
         \nNew price: {new_price}\n{new_time}
-        \n{"The price fell by" if new_price < self.old_price else "The price went up by"}: {price_change}"""
+        \n{"The price fell by" if new_price < self.old_price else "The price went up by"}: {a}"""
         self.old_price = new_price
         self.old_time = new_time
         return new_message
